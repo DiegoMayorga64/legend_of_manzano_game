@@ -13,6 +13,9 @@ namespace Project.Player
         private SpriteRenderer _spriteRenderer;
 
         [Header("Ground Check")]
+        [Header("Audio")]
+        [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private AudioClip _jumpSound;
         [SerializeField] private Transform _groundCheck;
         [SerializeField] private float _groundCheckRadius = 0.1f;
         [SerializeField] private LayerMask _groundLayer;
@@ -51,6 +54,7 @@ namespace Project.Player
             if (_input.JumpPressed && IsGrounded)
             {
                 _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _jumpVelocity);
+                _audioSource.PlayOneShot(_jumpSound);
             }
         }
 
