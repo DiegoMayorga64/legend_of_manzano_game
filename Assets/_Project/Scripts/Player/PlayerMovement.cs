@@ -10,6 +10,8 @@ namespace Project.Player
         [SerializeField] private float _speed = 150f;
         [SerializeField] private float _jumpVelocity = 300f;
 
+        private SpriteRenderer _spriteRenderer;
+
         [Header("Ground Check")]
         [SerializeField] private Transform _groundCheck;
         [SerializeField] private float _groundCheckRadius = 0.1f;
@@ -17,6 +19,8 @@ namespace Project.Player
 
         private Rigidbody2D _rb;
         private PlayerInputHandler _input;
+
+        public Rigidbody2D Rigidbody => _rb;
 
         public bool IsGrounded { get; private set; }
         public bool IsMoving { get; private set; }
@@ -26,6 +30,7 @@ namespace Project.Player
         {
             _rb = GetComponent<Rigidbody2D>();
             _input = GetComponent<PlayerInputHandler>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         private void FixedUpdate()
@@ -56,7 +61,12 @@ namespace Project.Player
 
             if (IsMoving)
             {
-                FacingRight = direction > 0;
+                bool newFacingRight = direction > 0;
+                if (newFacingRight != FacingRight)
+                {
+                    FacingRight = newFacingRight;
+                    _spriteRenderer.flipX = !FacingRight;
+                }
                 _rb.linearVelocity = new Vector2(direction * _speed, _rb.linearVelocity.y);
             }
             else
