@@ -46,7 +46,7 @@ namespace Project.Gameplay
             if (other.TryGetComponent<IDamageable>(out var damageable))
             {
                 Vector2 hitDirection = ((Vector2)(other.transform.position - transform.position)).normalized;
-                damageable.TakeDamage(1, hitDirection);
+                damageable.TakeDamage(_damage, hitDirection);
                 Destroy(gameObject);
                 return;
             }
