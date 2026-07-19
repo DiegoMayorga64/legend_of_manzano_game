@@ -11,6 +11,9 @@ namespace Project.Player
             public bool JumpPressed { get; private set; }
             public bool JumpReleased { get; private set; }
 
+            public bool ShootPressed { get; private set; }
+            private InputAction _shootAction;
+
             private InputAction _moveAction;
             private InputAction _jumpAction;
 
@@ -19,16 +22,19 @@ namespace Project.Player
                 var playerInput = GetComponent<PlayerInput>();
                 _moveAction = playerInput.actions["Move"];
                 _jumpAction = playerInput.actions["Jump"];
+                _shootAction = playerInput.actions["Shoot"];
             }
 
             private void OnEnable()
             {
+                _shootAction.performed += OnShootPerformed;
                 _jumpAction.performed += OnJumpPerformed;
                 _jumpAction.canceled += OnJumpCanceled;
             }
 
             private void OnDisable()
             {
+                _shootAction.performed -= OnShootPerformed;
                 _jumpAction.performed -= OnJumpPerformed;
                 _jumpAction.canceled -= OnJumpCanceled;
             }
@@ -47,6 +53,10 @@ namespace Project.Player
                 JumpPressed = false;
                 JumpReleased = false;
             }
+
+            private void OnShootPerformed(InputAction.CallbackContext ctx) => ShootPressed = true;
+
+            public void ConsumeShootFlag() => ShootPressed = false;
     }    
     
 }
